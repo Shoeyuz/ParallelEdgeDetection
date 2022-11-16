@@ -1,6 +1,9 @@
 import numpy as np
 import cv2
 from matplotlib import pyplot as plt
+import math
+ 
+
 
 
 
@@ -25,8 +28,8 @@ def sobelFilter(a):
 
             horizontal_transformed_pixels = horizontal_filter*local_pixels
             horizontal_score = (horizontal_transformed_pixels.sum())/4
-            
-            edge_score = (vertical_score**2 + horizontal_score**2)**0.5
+                       
+            edge_score = math.sqrt(vertical_score**2 + horizontal_score**2)
             edges_img[row,col] = [edge_score]*3
 
 
@@ -35,9 +38,11 @@ def sobelFilter(a):
     plt.show()
 
 
-
-img = cv2.imread('C:\\Users\\micha\\OneDrive\\Documents\\School\\comp5900\\IMG_45111.jpg', cv2.COLOR_BGR2GRAY)
-sobelFilter(img)
+if __name__=='__main__':
+    img = cv2.imread('C:\\Users\\micha\\OneDrive\\Documents\\School\\comp5900\\IMG_45111.jpg', cv2.COLOR_BGR2GRAY)
+    #this is to ensure that we are smoothing the image and removing the noise from the image
+    blur = cv2.GaussianBlur(img,(15,15),0)
+    sobelFilter(blur)
 
 
 
