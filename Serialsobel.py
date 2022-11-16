@@ -2,12 +2,14 @@ import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 import math
- 
+import time
 
 
 
 
 def sobelFilter(a):
+    start_time = time.perf_counter()
+
     img = a
     #kernel for the filter sobel
     vertical_filter = [[-1,-2,-1],[0,0,0],[1,2,1]]
@@ -34,9 +36,12 @@ def sobelFilter(a):
 
 
     edges_img = edges_img/edges_img.max()
+    finish_time = time.perf_counter()
+    print(f"Serial filtering finished in {finish_time-start_time} sec")
+
     plt.imshow(edges_img)
     plt.show()
-
+    
 
 if __name__=='__main__':
     img = cv2.imread('C:\\Users\\micha\\OneDrive\\Documents\\School\\comp5900\\IMG_45111.jpg', cv2.COLOR_BGR2GRAY)
