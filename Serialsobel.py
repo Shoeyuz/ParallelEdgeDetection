@@ -18,7 +18,7 @@ def sobelFilter(a):
 
     edges_img = np.zeros_like(img)
 
-    #application of the vertical kernel
+    #application of the vertical and horizontal kernel together
     for row in range(1,n-2):
         for col in range(1,m-2):
             local_pixels = img[row-1:row+2,col-1:col+2,0]
