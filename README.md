@@ -19,5 +19,5 @@ Using the compiler infrastructure we can take advantage of CUDA by applying proc
 
 What's nice about this approach compared to previous is that we aren't splitting it and combining the two filters later. Thus, we in a way are able to obtain a faster architecture here. Even if we assign half our cores to one, and half our cores to the other filter - Gx, Gy - we still run into the problem of serialzed portion having to combine. By doing them both in one function, we are able to allow GPU cores to combine them in the function itself and prevent the serial portion of the program to be big!
 
-# Part 3: Manual CUDA speedup
+## Part 3: Manual CUDA speedup
 Previous speedup used compiler based edits to allow us to alter the speedup and allocate processors from the GPU. However, with this part we are able to
