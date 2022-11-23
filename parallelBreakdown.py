@@ -72,6 +72,8 @@ def combine(chunks,height,width,cores,img):
         startX = endX
         endX += sliceWidthSize
 
+    return t
+
     
    
 
