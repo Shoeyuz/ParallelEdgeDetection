@@ -21,3 +21,8 @@ What's nice about this approach compared to previous is that we aren't splitting
 
 ## Part 3: Most effective parallelization
 We don't use CUDA in this case, but what we do is we split up the image into a bunch of sections and then we pass those sections to some cores - these processors then run in parallel and carry out their work on these chunks themselves and at the end we serially combine the multiple chunks back into the image together. You can actually see in the image how the image is split up if you run the file: parallelBreakdown.py
+
+```
+//Serial filtering finished in 13.6863068 sec
+//Parallel filtering finished in 1.5849926 sec
+```
