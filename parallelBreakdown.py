@@ -22,7 +22,7 @@ def splitUpImage(height,width,image,cores):
         y = 0
         endHeight = sizeY
         x = endWidth
-        endWidth += sizeX 
+        endWidth += sizeX    
     return imageChunks
 
 
@@ -52,27 +52,28 @@ def sobelFilter(a):
 
 
 def combine(chunks,height,width,cores,img):
-    sliceWidthSize = width / cores
-    sliceHeightSize =  height / cores 
-    startX = 0
-    endX = sliceWidthSize
-    startY = 0
-    endY = sliceHeightSize
+    
+    sizeX = width / cores
+    sizeY =  height / cores 
+    x = 0
+    endX = sizeX
+    y = 0
+    endY = sizeY
     pos = 0
      #shape of image
-    t = np.zeros((height,width))
+    finalImage = np.zeros((height,width))
     for i in range(1, cores):
         for j in range(0, cores+2):
-            t[int(startX):int(endX), int(startY):int(endY)] = chunks[pos]
+            finalImage[int(x):int(endX), int(y):int(endY)] = chunks[pos]
             pos = pos + 1
-            startY = endY
-            endY += sliceHeightSize
-        startY = 0
-        endY = sliceHeightSize
-        startX = endX
-        endX += sliceWidthSize
+            y = endY
+            endY += sizeY
+        y = 0
+        endY = sizeY
+        x = endX
+        endX += sizeX
 
-    return t
+    return finalImage 
 
     
    
@@ -85,13 +86,12 @@ if __name__=='__main__':
     n,m,d = img.shape #rows columns 
 
     #first step is to split up the image into multiple chunks equal to our processor amount
+    start_time = time.perf_counter()
     chunks = splitUpImage(n,m,blur,mp.cpu_count())
-
     res = Parallel(n_jobs=mp.cpu_count())(delayed(sobelFilter)(chunk)for chunk in chunks)
-
     finalImg = combine(res,n,m,mp.cpu_count(),blur)
-
     finish_time = time.perf_counter()
+    print(f"Parallel filtering finished in {finish_time-start_time} sec")
 
     plt.imshow(finalImg)
     plt.show()
