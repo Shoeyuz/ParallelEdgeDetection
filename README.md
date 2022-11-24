@@ -2,7 +2,7 @@
 
 
 
-## Part 1: Basic Parallelization using two processors
+## Part 1: MISD Parallelization using two processors
 In this we split up the Gx Gy kernel applications to the image assinging the function to a processor. This means we have two processors carrying out work in tandem, after which the serial bottleneck of combining them takes over. This will prevent us from achieving a perfect x2 speedup. 
 ```
 //Serial filtering finished in 13.6863068 sec
