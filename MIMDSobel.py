@@ -59,7 +59,7 @@ def sobelFilterX(a):
 
 
 
-def combine(chunks,height,width,cores,img):
+def combine(chunks,height,width,cores,q):
     
     sizeX = width / cores
     sizeY =  height / cores 
@@ -80,8 +80,9 @@ def combine(chunks,height,width,cores,img):
         endY = sizeY
         x = endX
         endX += sizeX
+    q.put(finalImage)
 
-    return finalImage 
+    
 
     
    
@@ -100,9 +101,18 @@ if __name__=='__main__':
 
     resY = Parallel(n_jobs=round(mp.cpu_count()/2)-1)(delayed(sobelFilterX)(chunk)for chunk in chunks)
     resX = Parallel(n_jobs=round(mp.cpu_count()/2)-1)(delayed(sobelFilterY)(chunk)for chunk in chunks)
-    finalImgX = combine(resX,n,m,round(mp.cpu_count()/2)-1,blur)
-    finalImgY = combine(resY,n,m,round(mp.cpu_count()/2)-1,blur)
-    sobelCombined = cv2.bitwise_or(finalImgY, finalImgX)
+    ctx = mp.get_context('spawn')
+    q = ctx.Queue()  
+
+    finalImgX = ctx.Process(target=combine,args=(resX,n,m,round(mp.cpu_count()/2)-1,q))
+    finalImgY = ctx.Process(target=combine,args=(resY,n,m,round(mp.cpu_count()/2)-1,q))
+    finalImgX.start()
+    finalImgY.start()
+    #finalImgX = combine(resX,n,m,round(mp.cpu_count()/2)-1)
+    #finalImgY = combine(resY,n,m,round(mp.cpu_count()/2)-1)
+    sobelCombined = cv2.bitwise_or(q.get(), q.get())
+    finalImgY.join()
+    finalImgX.join()
     finish_time = time.perf_counter()
     print(f"Parallel filtering finished in {finish_time-start_time} sec")
 
