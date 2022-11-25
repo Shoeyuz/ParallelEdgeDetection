@@ -43,9 +43,7 @@ if __name__=='__main__':
     horizontal_edges_img = np.zeros_like(img)
     vertical_edges_img = np.zeros_like(img)
 
-   
-    #simple parallelization. splitting the x kernel and y kernel application
-    #max change possible is a factor of 2. even then, this is a very simple approach - for benchamrking future ones
+  
     ctx = mp.get_context('spawn')
     q = ctx.Queue()  
     p1 = ctx.Process(target=computationVertical,args=(img,vertical_edges_img,n,m,q))
