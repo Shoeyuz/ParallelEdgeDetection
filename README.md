@@ -1,5 +1,4 @@
-# COMP-5704-Project
-
+# Parallel Edge Detection
 
 
 ## Part 1: MISD Parallelization using two processors
